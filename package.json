@@ -1,0 +1,25 @@
+{
+  "name": "pruebas_terium",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:local": "BASE_URL=${BASE_URL:-https://qa-terium.test} playwright test",
+    "test:staging": "BASE_URL=https://demo.staging.terium-labs.com playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^24.5.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2"
+  }
+}

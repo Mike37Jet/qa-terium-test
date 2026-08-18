@@ -1,0 +1,29 @@
+# Credenciales / estado de sesión
+.env
+.env.*
+!.env.example
+auth.json
+
+# Dependencias
+/node_modules/
+
+# Salidas de Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/.playwright-mcp/
+
+# Reportes locales
+/reports/
+
+# Sistema operativo
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Claude Code (configuración local personal)
+.claude/settings.local.json
+.claude/skills/
+CLAUDE.local.md
