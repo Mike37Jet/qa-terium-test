@@ -13,12 +13,15 @@ creación de órdenes y la conversión de pedido a orden. Se ejecuta sobre **Chr
 ## Instalación
 
 ```bash
-npm ci
-npx playwright install chromium webkit
-cp .env.example .env
+npm run setup
 ```
 
-Luego edita `.env` con la URL de tu entorno y las credenciales.
+Instala dependencias y navegadores. Después, si la suite **no** vive dentro del repo de la
+aplicación, copia la plantilla de configuración y rellénala:
+
+```bash
+cp .env.example .env
+```
 
 > La descarga de navegadores son ~870 MB y tarda unos minutos. Se guarda una única vez
 > por máquina en `~/Library/Caches/ms-playwright/`, no por proyecto.
@@ -33,11 +36,16 @@ errores de "Executable doesn't exist".
 
 ## Configuración
 
-Todo se controla desde el `.env`:
+**Si la suite está dentro del repo de la aplicación** (por ejemplo en `/e2e`), la URL se
+detecta sola: se lee `APP_URL` del `.env` de Laravel, que ya es tu dominio de Herd. No hay
+nada que configurar. Al arrancar, la suite imprime contra qué entorno va a correr y de dónde
+sacó esa URL.
+
+El resto se controla desde el `.env` de la suite:
 
 | Variable | Obligatoria | Descripción |
 |---|---|---|
-| `BASE_URL` | No | Entorno bajo prueba. Por defecto, staging. |
+| `BASE_URL` | No | Entorno bajo prueba. Precedencia: esta variable › `APP_URL` de la aplicación › staging. |
 | `AUTH_USER` | **Sí** | Usuario con el que se autentican las pruebas. |
 | `AUTH_PASS` | **Sí** | Contraseña de ese usuario. |
 
@@ -49,9 +57,8 @@ automáticamente los errores de certificado — necesario porque Herd usa una CA
 ## Ejecución
 
 ```bash
-npm run test:local      # contra tu entorno local (Herd)
-npm run test:staging    # contra staging
-npm test                # contra lo que diga BASE_URL en tu .env
+npm run e2e                                  # entorno detectado automáticamente
+BASE_URL=https://otro-entorno.com npm run e2e   # apuntando a otro entorno
 ```
 
 Depuración:
@@ -75,7 +82,8 @@ npx playwright test --project=chromium
 Es la forma recomendada. Cada dev corre contra **su propia base de datos**, así que nadie
 pisa los datos de nadie y staging no se ensucia.
 
-En `.env`, apunta `BASE_URL` al dominio de Herd (por ejemplo `https://qa-terium.test`).
+Si la suite vive dentro del repo de la aplicación no hay que hacer nada: la URL sale de
+`APP_URL`. Si está en un repo aparte, apunta `BASE_URL` a tu dominio de Herd.
 
 **Tu base de datos local necesita datos.** Las pruebas seleccionan el primer elemento de
 varios catálogos: pacientes, clientes, médicos, diagnósticos y exámenes. Contra una base

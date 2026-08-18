@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "setup": "npm ci && playwright install chromium webkit",
     "test": "playwright test",
-    "test:local": "BASE_URL=${BASE_URL:-https://qa-terium.test} playwright test",
-    "test:staging": "BASE_URL=https://demo.staging.terium-labs.com playwright test",
+    "e2e": "playwright test",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug",
     "test:headed": "playwright test --headed",
