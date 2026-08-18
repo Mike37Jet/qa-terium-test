@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "setup": "npm ci && playwright install chromium webkit",
+    "configure": "node scripts/configure.mjs",
     "test": "playwright test",
     "e2e": "playwright test",
     "test:ui": "playwright test --ui",

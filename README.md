@@ -16,14 +16,24 @@ creación de órdenes y la conversión de pedido a orden. Se ejecuta sobre **Chr
 npm run setup
 ```
 
-Instala dependencias y navegadores. Después, copia la plantilla de configuración:
+Instala dependencias y navegadores. Después, configura las credenciales sin salir
+del terminal:
 
 ```bash
-cp .env.example .env
+npm run configure
 ```
 
-Rellena `AUTH_USER` y `AUTH_PASS`. `BASE_URL` déjala comentada si esta carpeta está
-dentro del proyecto de la aplicación: se detecta sola.
+Pregunta usuario y contraseña (la contraseña no se muestra al teclearla) y genera el
+`.env`. Si ya existía uno, guarda una copia en `.env.bak` antes de sobrescribirlo.
+
+La URL no se pregunta: si esta carpeta está dentro del proyecto de la aplicación se
+detecta sola. Para fijarla, `npm run configure -- --url=https://otro-entorno.com`.
+
+Modo desatendido, para automatizar:
+
+```bash
+npm run configure -- --user=a@b.com --pass=secreto
+```
 
 > La descarga de navegadores son ~870 MB y tarda unos minutos. Se guarda una única vez
 > por máquina en `~/Library/Caches/ms-playwright/`, no por proyecto.
