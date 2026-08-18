@@ -16,12 +16,14 @@ creación de órdenes y la conversión de pedido a orden. Se ejecuta sobre **Chr
 npm run setup
 ```
 
-Instala dependencias y navegadores. Después, si la suite **no** vive dentro del repo de la
-aplicación, copia la plantilla de configuración y rellénala:
+Instala dependencias y navegadores. Después, copia la plantilla de configuración:
 
 ```bash
 cp .env.example .env
 ```
+
+Rellena `AUTH_USER` y `AUTH_PASS`. `BASE_URL` déjala comentada si esta carpeta está
+dentro del proyecto de la aplicación: se detecta sola.
 
 > La descarga de navegadores son ~870 MB y tarda unos minutos. Se guarda una única vez
 > por máquina en `~/Library/Caches/ms-playwright/`, no por proyecto.
