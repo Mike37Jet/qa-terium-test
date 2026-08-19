@@ -8,6 +8,17 @@ import readline from 'readline';
 
 const ENV_PATH = path.resolve(process.cwd(), '.env');
 
+// Misma regla que tests/data/env.js: si la suite está dentro del proyecto de la
+// aplicación, la URL sale de su APP_URL y no hay que preguntarla.
+function detectAppUrl() {
+  const appRoot = path.resolve(process.cwd(), '..');
+  if (!fs.existsSync(path.join(appRoot, 'artisan'))) return null;
+  const envPath = path.join(appRoot, '.env');
+  if (!fs.existsSync(envPath)) return null;
+  const m = fs.readFileSync(envPath, 'utf8').match(/^\s*APP_URL\s*=\s*(.+)$/m);
+  return m?.[1].trim().replace(/^["']|["']$/g, '') || null;
+}
+
 const flags = Object.fromEntries(
   process.argv.slice(2)
     .filter((a) => a.startsWith('--'))
@@ -69,15 +80,34 @@ const current = readExisting();
 
 // Nota: BASE_URL solo se escribe si se pide explícitamente. Dejarla fuera permite
 // que la suite la detecte desde el APP_URL de la aplicación.
-const baseUrl = flags.url ?? current.BASE_URL ?? '';
+const detected = detectAppUrl();
+let baseUrl = flags.url ?? current.BASE_URL ?? '';
 
 let user = flags.user ?? '';
 let pass = flags.pass ?? '';
 
-if (!user || !pass) {
+const needsPrompt = !user || !pass || (!baseUrl && !detected);
+
+if (needsPrompt) {
   console.log('\n  Configuración de la suite E2E\n');
-  if (baseUrl) console.log(`  Entorno fijado: ${baseUrl}`);
-  else console.log('  Entorno: se detectará desde la aplicación (APP_URL).');
+
+  if (baseUrl) {
+    console.log(`  Entorno fijado: ${baseUrl}`);
+  } else if (detected) {
+    console.log(`  Entorno detectado desde la aplicación: ${detected}`);
+  } else {
+    // Sin detección no se puede asumir nada: callar aquí llevaría a correr contra
+    // staging sin que el dev se entere.
+    console.log('  Esta carpeta no está dentro del proyecto de la aplicación,');
+    console.log('  así que hay que indicar contra qué entorno correr.\n');
+    baseUrl = await ask('  URL del entorno (p. ej. https://mi-proyecto.test): ');
+    if (!baseUrl) {
+      console.error('\n  Sin URL no se puede continuar. No se escribió nada.\n');
+      process.exit(1);
+    }
+    console.log('');
+  }
+
   console.log('  Usa credenciales de un usuario que exista en ESE entorno.\n');
 
   const hint = current.AUTH_USER ? ` [${current.AUTH_USER}]` : '';

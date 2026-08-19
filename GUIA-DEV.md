@@ -33,9 +33,12 @@ cd ~/ruta/a/tu/proyecto
 
 **Qué hace:** te coloca en la raíz del sistema, la carpeta donde está el `artisan`.
 
-**Por qué importa:** la suite se instala *dentro* de esta carpeta. Al ejecutarse mira el
-directorio superior y lee el `APP_URL` de tu `.env` de Laravel para saber contra qué URL
-correr. Por eso no tendrás que configurar ninguna dirección: ya la tienes ahí.
+**Por qué importa:** al ejecutarse, la suite mira el directorio superior y lee el `APP_URL`
+de tu `.env` de Laravel para saber contra qué URL correr. Instalándola aquí dentro no
+tendrás que configurar ninguna dirección: ya la tienes ahí.
+
+> **No es obligatorio.** Puedes clonarla donde quieras; lo único que cambia es que tendrás
+> que indicar la URL a mano, y el paso 4 te la preguntará. Todo lo demás funciona igual.
 
 ---
 
@@ -49,6 +52,7 @@ git clone https://github.com/Mike37Jet/qa-terium-test.git e2e
 
 **Por qué así:** la suite vive en su propio repositorio, mantenido por QA. Clonarla aquí
 dentro no modifica el repositorio del sistema — es una carpeta más, sin versionar por él.
+El nombre `e2e` es solo una convención; puedes usar otro.
 
 Opcional, para que no te aparezca como archivo sin seguimiento en `git status`:
 
@@ -94,12 +98,20 @@ La contraseña no se muestra mientras la tecleas.
 No sirven las de staging: son bases distintas. Si no sabes cuál usar, míralo en los
 seeders del proyecto.
 
-**Qué no te pregunta:** la URL. Se detecta sola desde tu `APP_URL`.
+**Qué pasa con la URL:** si la suite está dentro del proyecto, no te la pregunta — se
+detecta sola desde tu `APP_URL`. Si está fuera, te la pedirá, porque no hay forma de
+adivinarla y correr contra el entorno equivocado sería peor.
 
 Si prefieres una sola línea sin preguntas:
 
 ```bash
 npm run configure -- --user=tu@usuario.com --pass=tuClave
+```
+
+Y si necesitas fijar la URL explícitamente:
+
+```bash
+npm run configure -- --url=https://mi-proyecto.test
 ```
 
 ---
