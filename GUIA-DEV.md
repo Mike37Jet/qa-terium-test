@@ -133,8 +133,8 @@ Lo primero que verás es contra qué entorno va a correr:
 Entorno: https://tu-proyecto.test  (origen: APP_URL del .env de la aplicación)
 ```
 
-**Comprueba esa línea.** Si no muestra tu dominio local, algo no está bien configurado:
-detente y avisa antes de seguir.
+**Comprueba esa línea.** Debe mostrar TU dominio local. Si muestra otro, detente y avisa
+antes de seguir: estarías ejecutando contra un entorno que no es el tuyo.
 
 ---
 
@@ -163,9 +163,25 @@ No se ejecutó el paso 4, o quedó vacío. Repite `npm run configure`.
 
 ```
 El login no llegó a la página de bienvenida.
+  Usuario: tu@usuario.com
+  Revisa que las credenciales sean válidas en https://...
 ```
 
-Ese usuario no existe en tu base local, o la contraseña no es correcta.
+Antes de dar por hecho que la contraseña está mal, **mira la URL que aparece en ese
+mensaje**. Si no es tu entorno local, el problema no son las credenciales: son correctas,
+pero se están probando contra otro sitio donde ese usuario no existe.
+
+Si la URL sí es la tuya, entonces ese usuario no existe en tu base o la contraseña no
+coincide.
+
+**No hay ningún entorno configurado**
+
+```
+No hay ningún entorno configurado.
+```
+
+La suite no está dentro del proyecto y el `.env` no tiene `BASE_URL`. Indícala con
+`npm run configure -- --url=https://tu-proyecto.test`.
 
 **Fallo al seleccionar paciente, cliente, médico, diagnóstico o examen**
 

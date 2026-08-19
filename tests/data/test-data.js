@@ -53,7 +53,10 @@ export const DEFAULT_ORDER = {
 };
 
 export const TEST_USERS = {
-  knownEmail: 'soporte@orion-labs.com',
+  // El usuario "conocido" es el del .env: un correo fijo aquí pertenecería a un
+  // entorno concreto y en cualquier otro el caso dejaría de probar lo que dice
+  // (usuario válido con contraseña incorrecta) sin que el test lo delatara.
+  get knownEmail() { return process.env.AUTH_USER; },
   unknownEmail: 'noexiste@ejemplo.com',
 };
 

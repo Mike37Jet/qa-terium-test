@@ -76,6 +76,14 @@ function ask(prompt, { mask = false } = {}) {
   });
 }
 
+// Entre comillas simples, dotenv toma el valor literal: así sobreviven espacios,
+// almohadillas y signos de dólar. Si el valor ya lleva una comilla simple se usan
+// dobles, escapando lo que dotenv interpretaría.
+function quote(value) {
+  if (!value.includes("'")) return `'${value}'`;
+  return `"${value.replace(/([\\"$`])/g, '\\$1')}"`;
+}
+
 const current = readExisting();
 
 // Nota: BASE_URL solo se escribe si se pide explícitamente. Dejarla fuera permite
@@ -137,8 +145,8 @@ const lines = [
   '# Si esta carpeta está dentro del proyecto de la aplicación, se detecta sola.',
   baseUrl ? `BASE_URL=${baseUrl}` : '# BASE_URL=https://mi-app.test',
   '',
-  `AUTH_USER=${user}`,
-  `AUTH_PASS=${pass}`,
+  `AUTH_USER=${quote(user)}`,
+  `AUTH_PASS=${quote(pass)}`,
   '',
 ].join('\n');
 

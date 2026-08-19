@@ -8,6 +8,15 @@ export default async (config) => {
   const user = process.env.AUTH_USER;
   const password = process.env.AUTH_PASS;
 
+  if (!baseURL) {
+    throw new Error(
+      `No hay ningún entorno configurado.\n` +
+      `  Esta carpeta no está dentro del proyecto de la aplicación (no se encontró su APP_URL)\n` +
+      `  y el .env no define BASE_URL.\n` +
+      `  Indícalo con:  npm run configure -- --url=https://tu-proyecto.test`,
+    );
+  }
+
   console.log(`\n  Entorno: ${baseURL}  (origen: ${BASE_URL_SOURCE})\n`);
 
   if (!user || !password) {

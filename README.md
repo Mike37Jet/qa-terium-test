@@ -57,7 +57,7 @@ El resto se controla desde el `.env` de la suite:
 
 | Variable | Obligatoria | Descripción |
 |---|---|---|
-| `BASE_URL` | No | Entorno bajo prueba. Precedencia: esta variable › `APP_URL` de la aplicación › staging. |
+| `BASE_URL` | Solo si la suite está fuera del proyecto | Entorno bajo prueba. Precedencia: esta variable › `APP_URL` de la aplicación. Sin ninguna de las dos, la suite se detiene: no hay entorno por defecto. |
 | `AUTH_USER` | **Sí** | Usuario con el que se autentican las pruebas. |
 | `AUTH_PASS` | **Sí** | Contraseña de ese usuario. |
 
@@ -65,6 +65,9 @@ Sin `AUTH_USER` / `AUTH_PASS` la suite se detiene antes de ejecutar ningún test
 
 Cuando `BASE_URL` apunta a un dominio `.test`, `localhost` o `127.0.0.1`, se ignoran
 automáticamente los errores de certificado — necesario porque Herd usa una CA local.
+
+No existe un entorno por defecto a propósito: si no hay URL, la suite se detiene con un
+error en vez de ejecutar contra un sitio que nadie eligió.
 
 ## Ejecución
 
