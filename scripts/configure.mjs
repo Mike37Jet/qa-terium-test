@@ -89,33 +89,49 @@ const current = readExisting();
 // Nota: BASE_URL solo se escribe si se pide explícitamente. Dejarla fuera permite
 // que la suite la detecte desde el APP_URL de la aplicación.
 const detected = detectAppUrl();
-let baseUrl = flags.url ?? current.BASE_URL ?? '';
+
+// `explicitUrl` es lo que acabará escrito en el .env. Si la URL viene de la
+// detección y se confirma, se deja vacío a propósito para que siga detectándose.
+let explicitUrl = flags.url ?? current.BASE_URL ?? '';
 
 let user = flags.user ?? '';
 let pass = flags.pass ?? '';
 
-const needsPrompt = !user || !pass || (!baseUrl && !detected);
+// El entorno siempre se confirma, incluso si ya había uno: dar por bueno el valor
+// anterior es como alguien acaba ejecutando contra staging creyendo que va a su local.
+const confirmUrl = !flags.url;
+const needsPrompt = !user || !pass || confirmUrl;
 
 if (needsPrompt) {
   console.log('\n  Configuración de la suite E2E\n');
+}
 
-  if (baseUrl) {
-    console.log(`  Entorno fijado: ${baseUrl}`);
-  } else if (detected) {
-    console.log(`  Entorno detectado desde la aplicación: ${detected}`);
+if (confirmUrl) {
+  const effective = explicitUrl || detected;
+
+  if (effective) {
+    const origin = explicitUrl
+      ? 'definido en tu .env'
+      : 'detectado desde el .env de la aplicación';
+    console.log(`  Entorno ${origin}:\n    ${effective}\n`);
+    const answer = await ask('  Pulsa Enter si es el tuyo, o escribe otra URL: ');
+    if (answer) explicitUrl = answer;
+    console.log('');
   } else {
-    // Sin detección no se puede asumir nada: callar aquí llevaría a correr contra
-    // staging sin que el dev se entere.
     console.log('  Esta carpeta no está dentro del proyecto de la aplicación,');
     console.log('  así que hay que indicar contra qué entorno correr.\n');
-    baseUrl = await ask('  URL del entorno (p. ej. https://mi-proyecto.test): ');
-    if (!baseUrl) {
+    explicitUrl = await ask('  URL del entorno (p. ej. https://mi-proyecto.test): ');
+    if (!explicitUrl) {
       console.error('\n  Sin URL no se puede continuar. No se escribió nada.\n');
       process.exit(1);
     }
     console.log('');
   }
+}
 
+const baseUrl = explicitUrl;
+
+if (needsPrompt) {
   console.log('  Usa credenciales de un usuario que exista en ESE entorno.\n');
 
   const hint = current.AUTH_USER ? ` [${current.AUTH_USER}]` : '';

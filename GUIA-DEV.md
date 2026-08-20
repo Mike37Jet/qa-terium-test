@@ -91,16 +91,29 @@ no se vuelve a descargar nunca más.
 npm run configure
 ```
 
-**Qué hace:** pregunta usuario y contraseña en el terminal y genera el archivo `.env`.
-La contraseña no se muestra mientras la tecleas.
+**Qué hace:** te muestra contra qué entorno se va a ejecutar y te pide confirmarlo; luego
+pregunta usuario y contraseña, y genera el archivo `.env`. La contraseña no se muestra
+mientras la tecleas.
+
+Lo primero que verás es algo así:
+
+```
+  Entorno detectado desde el .env de la aplicación:
+    https://tu-proyecto.test
+
+  Pulsa Enter si es el tuyo, o escribe otra URL:
+```
+
+**Revisa esa URL.** Si es la tuya, Enter. Si no lo es, escribe la correcta ahí mismo: es la
+protección para no acabar ejecutando contra un entorno ajeno.
 
 **Qué credenciales poner:** las de un usuario **que exista en tu base de datos local**.
 No sirven las de staging: son bases distintas. Si no sabes cuál usar, míralo en los
 seeders del proyecto.
 
-**Qué pasa con la URL:** si la suite está dentro del proyecto, no te la pregunta — se
-detecta sola desde tu `APP_URL`. Si está fuera, te la pedirá, porque no hay forma de
-adivinarla y correr contra el entorno equivocado sería peor.
+**De dónde sale la URL propuesta:** si la suite está dentro del proyecto, de tu `APP_URL`.
+Si está fuera, no hay nada que detectar y tendrás que escribirla. En ambos casos se te pide
+confirmar antes de continuar.
 
 Si prefieres una sola línea sin preguntas:
 

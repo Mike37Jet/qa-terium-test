@@ -23,8 +23,12 @@ del terminal:
 npm run configure
 ```
 
-Pregunta usuario y contraseña (la contraseña no se muestra al teclearla) y genera el
-`.env`. Si ya existía uno, guarda una copia en `.env.bak` antes de sobrescribirlo.
+Muestra el entorno detectado y pide confirmarlo, luego pregunta usuario y contraseña (la
+contraseña no se muestra al teclearla) y genera el `.env`. Si ya existía uno, guarda una
+copia en `.env.bak` antes de sobrescribirlo.
+
+El entorno se confirma siempre, incluso si el `.env` ya traía uno: dar por bueno el valor
+anterior es como se acaba ejecutando contra el entorno equivocado.
 
 La URL no se pregunta: si esta carpeta está dentro del proyecto de la aplicación se
 detecta sola. Para fijarla, `npm run configure -- --url=https://otro-entorno.com`.
